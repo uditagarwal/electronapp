@@ -1,4 +1,6 @@
 const electron = require('electron')
+
+
 // Module to control application life.
 const app = electron.app
 // Module to create native browser window.
@@ -6,6 +8,25 @@ const BrowserWindow = electron.BrowserWindow
 
 const path = require('path')
 const url = require('url')
+
+// Specify flash path, supposing it is placed in the same directory with main.js.
+let pluginName
+switch (process.platform) {
+  case 'win32':
+    pluginName = 'pepflashplayer.dll'
+    break
+  case 'darwin':
+    pluginName = 'PepperFlashPlayer.plugin'
+    break
+  case 'linux':
+    pluginName = 'libpepflashplayer.so'
+    break
+}
+app.commandLine.appendSwitch('ppapi-flash-path', path.join(__dirname, pluginName))
+
+// Optional: Specify flash version, for example, v17.0.0.169
+app.commandLine.appendSwitch('ppapi-flash-version', '17.0.0.169')
+
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
